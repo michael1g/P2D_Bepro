@@ -122,8 +122,8 @@
       const { OrderSegId } = _Order;
 
       // GM_registerMenuCommand(`Load Order #${OrderSegId}`, loadOrderFromStorage);
-      GM_registerMenuCommand(`Fill Details #${OrderSegId}`, fillHotelDetails);
-      GM_registerMenuCommand(`See Details #${OrderSegId}`, seeHotelDetails);
+      //GM_registerMenuCommand(`Fill Details #${OrderSegId}`, fillHotelDetails);
+     // GM_registerMenuCommand(`See Details #${OrderSegId}`, seeHotelDetails);
     }
   }
 
@@ -266,13 +266,13 @@
           value="BP Fill & Save"
        />`
     );
-    jQuery('[id*=frmTransact_btnContinue').before(
+   /* jQuery('[id*=frmTransact_btnContinue').before(
       `<input type="button" id="FillDetails" class="button marginAltSide10"
           style="background-color: #356e35"
           value="BP Fill"
        />`
     );
-
+*/
     jQuery('#FillDetails').click(fillHotelDetails);
     jQuery('#FillSaveDetails').click(() =>
       fillHotelDetails({ shouldSave: true })
@@ -299,13 +299,13 @@
        />`
     );
 
-    jQuery('[id*=InformationContent_btnContinue').before(
+/*    jQuery('[id*=InformationContent_btnContinue').before(
       `<input type="button" id="FillPaxes" class="button marginAltSide10"
           style="background-color: #356e35"
           value="BP Fill"
        />`
     );
-
+*/
     jQuery('#FillPaxes').click(fillPaxesDetails);
     jQuery('#FillSavePaxes').click(() =>
       fillPaxesDetails({ shouldSave: true })
@@ -404,6 +404,9 @@
     jQuery('[id*=ctl01_txtNet]')
       .val(SysTotalGross)
       .trigger(jQuery.Event('change'));
+    jQuery('[id*=ctl01_txtSuppPrice]')
+      .val(SysTotalGross)
+      .trigger(jQuery.Event('change'));    
     jQuery('[id*=ctl01_txtSellPrice]')
       .val(SysTotalGross2)
       .trigger(jQuery.Event('change'));
