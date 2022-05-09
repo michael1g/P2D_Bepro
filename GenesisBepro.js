@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
-// @namespace   https://issta.beprotravel.com/
-// @version     1.0.6
+// @namespace   https://genesis.beprotravel.com/
+// @version     2.0.0
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
-// @icon        https://issta.beprotravel.com/favicon.ico
-// @icon64      https://issta.beprotravel.com/favicon.ico
-// @homepage    https://issta.beprotravel.com/
-// @match       *://issta.beprotravel.com/*
+// @icon        https://genesis.beprotravel.com/favicon.ico
+// @icon64      https://genesis.beprotravel.com/favicon.ico
+// @homepage    https://genesis.beprotravel.com/
+// @match       *://genesis.beprotravel.com/*
 // @match       *.travelbooster.com/*
 // @grant       GM_setValue
 // @grant       GM_getValue
