@@ -15,9 +15,8 @@
 // @grant       GM_registerMenuCommand
 // @grant       GM_unregisterMenuCommand
 // @run-at      document-end
-// @updateURL   https://raw.githubusercontent.com/MishaKav/userscripts/bepro/bepro-helper.user.js
-// @downloadURL https://raw.githubusercontent.com/MishaKav/userscripts/bepro/bepro-helper.user.js
-// @supportURL  https://github.com/MishaKav/userscripts/issues
+// @updateURL   https://github.com/michael1g/GenesisBepro/blob/main/GenesisBepro.js
+// @downloadURL https://github.com/michael1g/GenesisBepro/blob/main/GenesisBepro.js
 // ==/UserScript==
 
 /* global $, jQuery, NC */
