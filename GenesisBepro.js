@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis
 // @namespace   https://issta.beprotravel.com/
-// @version     1.0.2
+// @version     1.0.4
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -347,7 +347,7 @@
         .prop('disabled', true)
         .css('background-color', '#ddd')
         .css('pointer-events', 'none');
-      console.log(`${_Order.Paxes.length} Paxes filled successfully`);
+      //console.log(`${_Order.Paxes.length} Paxes filled successfully`);
 
       if (shouldSave) {
         jQuery('[id*=InformationContent_btnContinue').click();
