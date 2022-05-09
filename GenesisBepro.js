@@ -400,16 +400,20 @@
 
   async function addPrice({ shouldSave }) {
     const { SysTotalGross, SysTotalGross2, OrderSegId } = _Order;
-
+ jQuery('[id*=ctl01_txtSuppPrice]')
+      .val(SysTotalGross)
+      .trigger(jQuery.Event('change'));
+        jQuery('[id*=ctl01_txtSellPrice]')
+      .val(SysTotalGross2)
+      .trigger(jQuery.Event('change'));
     jQuery('[id*=ctl01_txtNet]')
       .val(SysTotalGross)
       .trigger(jQuery.Event('change'));
-    jQuery('[id*=ctl01_txtSuppPrice]')
-      .val(SysTotalGross)
-      .trigger(jQuery.Event('change'));    
+       
     jQuery('[id*=ctl01_txtSellPrice]')
       .val(SysTotalGross2)
       .trigger(jQuery.Event('change'));
+
 
     console.log(`Finish To Fill Order: #${OrderSegId}`);
 
