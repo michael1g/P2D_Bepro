@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        BePro Global Export
+// @name        BePro 2 Genesis
 // @namespace   https://issta.beprotravel.com/
 // @version     1.0.2
 // @description This userscript send help to fill some order information in external systems
