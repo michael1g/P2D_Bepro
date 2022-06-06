@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     2.1.2
+// @version     2.1.3
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -292,13 +292,15 @@
           <pre>${order}</pre>
        </details>`
     );
-
+/*
     jQuery('[id*=InformationContent_btnContinue').before(
       `<input type="button" id="FillSavePaxes" class="button marginAltSide10"
           style="background-color: #356e35"
           value="BP Fill & Save"
        />`
     );
+	*/
+	 jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSavePaxes" href="#" style="text-decoration: none; color: #454545;">Genesis</a></p>`).insertAfter("#ctl00_footerWrapper");
 
 /*    jQuery('[id*=InformationContent_btnContinue').before(
       `<input type="button" id="FillPaxes" class="button marginAltSide10"
