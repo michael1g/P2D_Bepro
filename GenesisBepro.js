@@ -41,7 +41,7 @@
     eutr: 'EUROTOURS INTERNATIONAL',
     hpro: 'HOTELSPRO',
     htsw: 'HOTUSA (RESTEL)',
-    sunh: 'WELCOMEBEDS',
+    sunh: 'WEBBEDS FZ LLC',
     tdor: 'TELDAR',
   };
 
