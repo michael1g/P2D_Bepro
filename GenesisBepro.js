@@ -42,6 +42,7 @@
     hpro: 'HOTELSPRO',
     htsw: 'HOTUSA (RESTEL)',
     sunh: 'WEBBEDS FZ LLC',
+    ostr: 'RATEHAKE',	  
     tdor: 'TELDAR',
   };
 
