@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     2.1.6
+// @version     2.1.7
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -29,6 +29,8 @@
 
   const SUPPLIERS = {
     gogb: 'GO GLOBAL TRAVEL',
+    ean1: 'EXPEDIA',
+    ean2: 'EXPEDIA',
     ean7: 'EXPEDIA',
     ean8: 'EXPEDIA',
     hbed: 'EXPEDIA',
