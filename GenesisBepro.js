@@ -25,7 +25,7 @@
   'use strict';
 
   let _Order;
-  const TIMEOUT = 400;
+  const TIMEOUT = 420;
 
   const SUPPLIERS = {
     gogb: 'GO GLOBAL TRAVEL',
@@ -47,7 +47,7 @@
     ostr: 'RATEHAWK',	  
     tdor: 'TELDAR',
     brst: 'BRAYSTON TRAVEL',
-    grom:  'GET A ROOM,
+    grom: 'GET A ROOM',
   };
 
   const STATUSES = {
