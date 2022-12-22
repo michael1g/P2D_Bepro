@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     2.2.2
+// @version     2.2.3
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -205,7 +205,7 @@
       const miniOrder = {
         OrderSegId,
         SuppPnr,
-        ItemDesc,
+        ItemDesc: ItemDesc.replace(/'/g,""),,
         ItemStarRateCode,
         RoomsStatusCode,
         CheckIn,
@@ -217,7 +217,7 @@
         SysBasisCode: isHotel && Rooms[0].SysBasisCode,
         SysCurrencyCode,
         NumberOfNights,
-        ItemAddress,
+        ItemAddress: ItemAddress.replace(/'/g,""),
         SuppCityDesc,
         ItemPhone,
         ItemFax,
