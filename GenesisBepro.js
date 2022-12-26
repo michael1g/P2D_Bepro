@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     2.2.3
+// @version     2.2.4
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -44,7 +44,7 @@
     hpro: 'HOTELSPRO',
     htsw: 'HOTUSA (RESTEL)',
     sunh: 'WEBBEDS FZ LLC',
-    ostr: 'RATEHAWK',	  
+    ostr: 'RATEHAWK',
     tdor: 'TELDAR',
     brst: 'BRAYSTON TRAVEL',
     grom: 'GET A ROOM',
