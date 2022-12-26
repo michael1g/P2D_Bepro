@@ -205,7 +205,7 @@
       const miniOrder = {
         OrderSegId,
         SuppPnr,
-        ItemDesc: ItemDesc.replace(/'/g,""),,
+        ItemDesc: ItemDesc.replace(/'/g,""),
         ItemStarRateCode,
         RoomsStatusCode,
         CheckIn,
