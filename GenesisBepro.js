@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name        BePro 2 Genesis!
+// @name        BePro 3 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     2.2.6
+// @version     3.0.0
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -65,7 +65,7 @@
     'Miss.': { paxTitle: 'Miss.', paxValue: 'MISS' },
     'Dr.': { paxTitle: 'Dr.', paxValue: 'DR' },
     'Prof.': { paxTitle: 'Prof.', paxValue: 'PROF' },
-    Child: { paxTitle: 'Chd.', paxValue: 'CHD' },
+    'Child': { paxTitle: 'Chd.', paxValue: 'CHD' },
   };
 
   // for local debug
@@ -258,6 +258,7 @@
     }
 
     const order = JSON.stringify(_Order, null, 2);
+      /*
     jQuery('[id*=tabControlMain_G2Panel2').before(
       `<br/>
       <details>
@@ -265,13 +266,8 @@
           <pre>${order}</pre>
        </details>`
     );
-    /*jQuery('[id*=frmTransact_btnContinue').before(
-      `<input type="button" id="FillSaveDetails" class="button marginAltSide10"
-          style="background-color: #356e35"
-          value="BP Fill & Save"
-       />`
-    );*/
-    jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #454545;">Genesis</a></p>`).insertAfter("#ctl00_footerWrapper");
+    */
+    jQuery(`<p style="margin-top: 4px;margin-left: 10px;"><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Genesis</a></p>`).insertAfter("#ctl00_MainContent_frmTransact_tabControlMain_pnlDisconPriceList");
    /* jQuery('[id*=frmTransact_btnContinue').before(
       `<input type="button" id="FillDetails" class="button marginAltSide10"
           style="background-color: #356e35"
@@ -291,21 +287,15 @@
     }
 
     const order = JSON.stringify(_Order.Paxes, null, 2);
+      /* Details json info
     jQuery('[id*=CustomersList1_pnlCustomers').before(
       `<details>
           <summary>Details #${_Order.OrderSegId} (${_Order.Paxes.length} Paxes)</summary>
           <pre>${order}</pre>
        </details>`
     );
-/*
-    jQuery('[id*=InformationContent_btnContinue').before(
-      `<input type="button" id="FillSavePaxes" class="button marginAltSide10"
-          style="background-color: #356e35"
-          value="BP Fill & Save"
-       />`
-    );
-	*/
-	 jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSavePaxes" href="#" style="text-decoration: none; color: #454545;">Genesis P</a></p>`).insertAfter("#ctl00_footerWrapper");
+*/
+      if (order) jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSavePaxes" href="#" style="text-decoration: none; color: #2c21d1;">Genesis P</a></p>`).insertAfter("#ctl00_MainContent_dfAddCustomer_CustomersList1_btnAddPax");
 
 /*    jQuery('[id*=InformationContent_btnContinue').before(
       `<input type="button" id="FillPaxes" class="button marginAltSide10"
@@ -324,31 +314,46 @@
     if (isTravelBoosterSite() && isNotEmptyObject(_Order)) {
       for (let i = 0; i < _Order.Paxes.length; i++) {
         if (i !== 0) {
-          jQuery('[id*=CustomersList1_btnAddPax]').click();
+           document.getElementById("ctl00_MainContent_dfAddCustomer_CustomersList1_btnAddPax").click();
+          //jQuery('[id*=CustomersList1_btnAddPax]').click();
           await sleep(800);
         }
         const pax = _Order.Paxes[i];
         const row = jQuery('[id*=pnlCustomers] [divid=divCustomer]:last');
         const { paxTitle, paxValue } =
           PAX_TITLES[pax.PaxTitle] ?? PAX_TITLES['Mr.'];
-        row.find('[id*=ddlTitle_TBText').val(paxTitle);
-        row.find('[id*=ddlTitle_TBValue').val(paxValue);
+        row.find('[id*=ddlTitle_tbAutoComplete').val(paxTitle);
+        row.find('[id*=ddlTitle_hfAutoComplete').val(paxValue);
 
         row.find('[id*=tbLastName').val(pax.LastName);
+        await sleep(50);
         row.find('[id*=tbFirstName').val(pax.FirstName);
 
         if (pax.DOB !== '1900-01-01T00:00:00') {
-          row
-            .find('[id*=dsBirthDate_tbCalendar')
-            .val(formatDate(pax.DOB, false))
-            .trigger(jQuery.Event('change'));
+            var calendar = row.find('[id*=dsBirthDate_tbCalendar');
+           // calendar.val(formatDate(pax.DOB, false));
+           // calendar.get(0).dispatchEvent(new Event('focus'));
+           // document.getElementById("ctl00_MainContent_dfAddCustomer_CustomersList1_rptCustomers_ctl02_dsBirthDate_hfDate").value='14/04/23';
+           // calendar.get(0).dispatchEvent(new KeyboardEvent('keypress',{'key':'13'}));
+
+
+            //row.find('[id*=dsBirthDate_tbCalendar').trigger("change");
+            /*
+            row.find('[id*=dsBirthDate_tbCalendar').trigger("focus");
+            var e = jQuery.Event("keypress");
+            e.which = 13; // Enter
+            row.find('[id*=dsBirthDate_tbCalendar').trigger(e);
+            */
+
         }
 
         row.find('[id*=tbEmail').val(pax.Email1);
         row.find('[id*=tbPhone').val(pax.Phone1 || pax.Mobile1);
 
-        row.find('[id*=ddlGender_TBText').val(pax.Gender);
-        row.find('[id*=ddlGender_TBValue').val(pax.Gender);
+           await sleep(300);
+       // row.find('[id*=ddlGender_TBText').val(pax.Gender);
+       // row.find('[id*=ddlGender_TBValue').val(pax.Gender);
+
       }
 
       jQuery('#FillPaxes, #FillSavePaxes')
@@ -358,7 +363,7 @@
       //console.log(`${_Order.Paxes.length} Paxes filled successfully`);
 
       if (shouldSave) {
-        jQuery('[id*=InformationContent_btnContinue').click();
+        jQuery('[id*=btnContinue').click();
       }
     }
   }
@@ -382,6 +387,14 @@
 
   async function showPricingTab(options = {}) {
     jQuery('[id*=tabPassengers_A]').trigger(jQuery.Event('click'));
+      /*
+      setTimeout(() => {
+           jQuery('[id*=frmTransact_ddlCurrency_Widget]').trigger(jQuery.Event('click'));
+           setTimeout(() => {
+               jQuery("div:contains('EUR-')").trigger(jQuery.Event('click'));
+           }, 500);
+        }, 1000);
+*/
     await addPax(options);
   }
 
@@ -396,9 +409,11 @@
   async function addCurrency(options = {}) {
     const { SysCurrencyCode = 'USD' } = _Order;
 
+
     jQuery('[id*=editCustomers_frmTransact_ddlCurrency]')
       .val(SysCurrencyCode)
       .trigger(jQuery.Event('change'));
+
 
     await sleep();
     await addPrice(options);
@@ -453,12 +468,11 @@
     const supplierText = SUPPLIERS[SysSuppCode] ? SUPPLIERS[SysSuppCode] : null;
 
     if (supplierText) {
-      setTimeout(() => {
-        jQuery('[id*=HotelSuppliersWithDetails]')
-          .find(`[text='${supplierText}']`)
-          .trigger(jQuery.Event('click'));
-      }, TIMEOUT);
+        setTimeout(() => {
+            jQuery("div:contains('"+supplierText+"')").trigger(jQuery.Event('click'));
+        }, 500);
     }
+
   }
 
   function fillDestination() {
@@ -475,9 +489,21 @@
     jQuery('[id*=frmDates_dsStartDate_hfDate]')
       .val(checkInString)
       .trigger('change');
+
+      /*
+    const date = new Date(CheckIn);
+    jQuery('[id*=frmDates_tpStartDate]')
+      .val(date.getHours() + ":" + date.getMinutes());*/
+
+
     jQuery('[id*=frmDates_dsEndDate_hfDate]')
       .val(checkOutString)
       .trigger('change');
+
+      /*
+     const date2 = new Date(CheckOut);
+     jQuery('[id*=frmDates_tpEndDate]')
+       .val(date2.getHours() + ":" + date2.getMinutes());*/
   }
 
   function fillReservation() {
