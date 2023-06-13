@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     3.0.1
+// @version     3.0.2
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -20,12 +20,10 @@
 // ==/UserScript==
 
 /* global $, jQuery, NC */
-
 (function () {
   'use strict';
 
   let _Order;
-  let _OrderSmall;
   let SourceUrl = "";
   let shouldSaveGlobal = true;
 
@@ -37,7 +35,7 @@
     ean2: 'EXPEDIA',
     ean7: 'EXPEDIA',
     ean8: 'EXPEDIA',
-    hbed: 'HOTELBEDS',
+    hbed: 'EXPEDIA',
     hb5: 'HOTELBEDS',
     tboh: 'TBO HOLIDAYS EUROPE BV',
     trvc: 'TRAVCO',
@@ -99,13 +97,8 @@
     return `${day}/${month}/${year}`;
   };
 
+
   const TARGET_URL = "https://b2e-genesis-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
-
-  if (location.href.includes('?Order=')){
-    SourceUrl = window.location.href;
-    CreateLocalOrder();
-  }
-
   function getQueryStringByName (name){
 var url = SourceUrl;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -131,8 +124,8 @@ var url = SourceUrl;
     initBeProSite();
 
     if (isTravelBoosterSite()) {
-      initTravelBooster();
       loadOrderFromStorage();
+      initTravelBooster();      
     }
 
     if (isNotEmptyObject(_Order)) {
@@ -145,8 +138,7 @@ var url = SourceUrl;
       // track change order on b2b
       $('#ActiveOrder').on('DOMSubtreeModified', () => {
         if (isNotEmptyObject(NC.Widgets.B2B.MyOrdersWidget._CurrentOrder)) {
-          _Order = NC.Widgets.B2B.MyOrdersWidget._CurrentOrder;
-          makeTravelBoosterUrl();
+          makeTravelBoosterUrl(NC.Widgets.B2B.MyOrdersWidget._CurrentOrder);
         }
       });
     }
@@ -162,22 +154,14 @@ var url = SourceUrl;
       return;
     }
 
-    const order = JSON.stringify(_OrderSmall, null, 2);
+    const order = JSON.stringify(_Order, null, 2);
 
-    jQuery(`<p style="margin-top: 4px;margin-left: 10px;"><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Genesis</a></p>`).insertAfter("#ctl00_MainContent_frmTransact_tabControlMain_pnlDisconPriceList");
+
+jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Genesis</a></button>`).insertBefore(`[id*=frmTransact_btnCancel]`);
     jQuery('#FillDetails').click(fillHotelDetails);
     jQuery('#FillSaveDetails').click(() =>
       fillHotelDetails({ shouldSave: false })
     );
-  }
-
-  function CreateLocalOrder() {
-    const orderQueryString = getQueryStringByName('Order');
-    if (isNotEmptyObject(orderQueryString)) {
-      const decodeOrderString = decodeURIComponent(orderQueryString);
-      _OrderSmall = JSON.parse(decodeOrderString);
-      saveOrderToStorage();
-    }
   }
 
   function addPaxesButtons() {
@@ -187,7 +171,7 @@ var url = SourceUrl;
     }
 
 
-    const order = JSON.stringify(_OrderSmall.Paxes, null, 2);
+    const order = JSON.stringify(_Order.Paxes, null, 2);
       if (order) jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSavePaxes" href="#" style="text-decoration: none; color: #2c21d1;">Genesis P</a></p>`).insertAfter("#ctl00_MainContent_dfAddCustomer_CustomersList1_btnAddPax");
     jQuery('#FillPaxes').click(fillPaxesDetails);
     jQuery('#FillSavePaxes').click(() =>
@@ -197,15 +181,15 @@ var url = SourceUrl;
   }
 
   async function fillPaxesDetails({ shouldSave = true }) {
-    if (isTravelBoosterSite() && isNotEmptyObject(_OrderSmall)) {
-      for (let i = 0; i < _OrderSmall.Paxes.length; i++) {
+    if (isTravelBoosterSite() && isNotEmptyObject(_Order)) {
+      for (let i = 0; i < _Order.Paxes.length; i++) {
         if (i !== 0) {
            document.getElementById("ctl00_MainContent_dfAddCustomer_CustomersList1_btnAddPax").click();
           //jQuery('[id*=CustomersList1_btnAddPax]').click();
  await sleep(800);
         }
 
-        const pax = _OrderSmall.Paxes[i];
+        const pax = _Order.Paxes[i];
         const row = jQuery('[id*=pnlCustomers] [divid=divCustomer]:last');
         const { paxTitle, paxValue } =
           PAX_TITLES[pax.PaxTitle] ?? PAX_TITLES['Mr.'];
@@ -246,7 +230,6 @@ var url = SourceUrl;
         .prop('disabled', true)
         .css('background-color', '#ddd')
         .css('pointer-events', 'none');
-      //console.log(`${_Order.Paxes.length} Paxes filled successfully`);
 
       if (shouldSaveGlobal) {
         jQuery('[id*=btnContinue').click();
@@ -257,39 +240,41 @@ var url = SourceUrl;
 
   function fillHotelDetails(options = {}) {
       loadOrderFromStorage();
-    if (isTravelBoosterSite() && isNotEmptyObject(_OrderSmall)) {
+
+
+    if (isTravelBoosterSite() && isNotEmptyObject(_Order)) {
     jQuery('[id*=cbResSupp_Widget]').trigger(jQuery.Event('click'));
-    const { SysSuppCode } = _OrderSmall;
+    const { SysSuppCode } = _Order;
     const supplierText = SUPPLIERS[SysSuppCode] ? SUPPLIERS[SysSuppCode] : null;
-   // alert("supplierText:"+supplierText);
+
     if (supplierText) {
-        setTimeout(() => {
-            jQuery("div:contains('"+supplierText+"')").trigger(jQuery.Event('click'));
-            setTimeout(() => {
-                jQuery('[id*=tabControlMain_txtDesc]').val(_OrderSmall.ItemDesc);
-                jQuery('[id*=cbAreas_tbAutoComplete]').val('Tel Aviv, TLV, Israel, ');
-                jQuery('[id*=cbAreas_hfAutoComplete]').val(4455); // Tel Aviv, TLV, Israel,
 
-                const { ItemAddress, SuppCityDesc, ItemZip, ItemPhone, ItemFax } = _OrderSmall;
-                jQuery('[id*=productAddress_tbAddress]').val(ItemAddress);
+        //wait until list is loaded
+        var waitList = setInterval(() => {
+            if (jQuery("a[title='"+supplierText+"']")){
+                clearInterval(waitList);
+                jQuery("a[title='"+supplierText+"']").click();
 
-                jQuery('[id*=productAddress_tbCity]').val(SuppCityDesc);
+                setTimeout(() => {
+                    jQuery('[id*=tabControlMain_txtDesc]').val(_Order.ItemDesc);
+                    jQuery('[id*=cbAreas_tbAutoComplete]').val('Tel Aviv, TLV, Israel, ');
+                    jQuery('[id*=cbAreas_hfAutoComplete]').val(4455); // Tel Aviv, TLV, Israel,
 
-                jQuery('[id*=productAddress_tbZip]').val(ItemZip);
+                    const { ItemAddress, SuppCityDesc, ItemZip, ItemPhone, ItemFax } = _Order;
+                    jQuery('[id*=productAddress_tbAddress]').val(ItemAddress);
+                    jQuery('[id*=productAddress_tbCity]').val(SuppCityDesc);
+                    jQuery('[id*=productAddress_tbZip]').val(ItemZip);
+                    jQuery('[id*=G2DataForm1_txtPhone1]').val(ItemPhone);
+                    jQuery('[id*=tabControlMain_txtFax]').val(ItemFax);
 
-                jQuery('[id*=G2DataForm1_txtPhone1]').val(ItemPhone);
-
-                jQuery('[id*=tabControlMain_txtFax]').val(ItemFax);
-
-                fillDates();
-
-                fillReservation();
-
+                    fillReservation();
+                    fillDates();
                         setTimeout(() => {
                              showPricingTab(options);
-                        }, 2000);
-            }, 3000);
-        }, 3000);
+                        }, 1000);
+                }, 1000);
+            }
+         }, 500);
     }
 
     }
@@ -305,32 +290,43 @@ var url = SourceUrl;
            }, 500);
         }, 1000);
 */
-      addCurrency(options);
 
-      jQuery('[id*=dlCustomers_ctl01_chkSelected]')
-          .prop('checked', true)
-          .trigger(jQuery.Event('change'));
+                        setTimeout(() => {
+                             addCurrency(options);
+                        }, 1000);
+     
 
-      sleep(500);
+
+
   }
 
   function addCurrency(options = {}) {
-    const { SysCurrencyCode = 'USD' } = _OrderSmall;
+    const { SysCurrencyCode = 'USD' } = _Order;
+       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click()
+        setTimeout(() => {
+            jQuery("a[title^='"+SysCurrencyCode+"']").click();
 
+          jQuery('[id*=dlCustomers_ctl01_chkSelected]')
+          .prop('checked', true)
+          .trigger(jQuery.Event('change'));
 
+               setTimeout(() => {
+                   addPrice(options);
+               }, 1000);
+        }, 1000);
+
+/*
     jQuery('[id*=editCustomers_frmTransact_ddlCurrency]')
       .val(SysCurrencyCode)
       .trigger(jQuery.Event('change'));
-
-      setTimeout(() => {
-            addPrice(options);
-        }, 1000);
+*/
+  
 
 
   }
 
   function addPrice({ shouldSave }) {
-    const { SysTotalGross, SysTotalGross2, OrderSegId } = _OrderSmall;
+    const { SysTotalGross, SysTotalGross2, OrderSegId } = _Order;
  jQuery('[id*=ctl01_txtSuppPrice]')
       .val(SysTotalGross)
       .trigger(jQuery.Event('change'));
@@ -356,7 +352,7 @@ var url = SourceUrl;
   }
 
    function fillReservation() {
-    const { OrderSegId, SuppPnr } = _OrderSmall;
+    const { OrderSegId, SuppPnr } = _Order;
 
     fillStatus();
     sleep(300);
@@ -366,7 +362,7 @@ var url = SourceUrl;
   }
 
   function fillStatus() {
-    const { RoomsStatusCode } = _OrderSmall;
+    const { RoomsStatusCode } = _Order;
     const statusValue = STATUSES[RoomsStatusCode]
       ? STATUSES[RoomsStatusCode]
       : 'None';
@@ -375,7 +371,7 @@ var url = SourceUrl;
   }
 
  function fillDates() {
-    const { CheckIn, CheckOut } = _OrderSmall;
+    const { CheckIn, CheckOut } = _Order;
     const checkInString = formatDate(CheckIn);
     const checkOutString = formatDate(CheckOut);
 
@@ -388,9 +384,9 @@ var url = SourceUrl;
   }
 
 
- function makeTravelBoosterUrl() {
-    if (isNotEmptyObject(_Order)) {
-      const [segment] = _Order.Order.Segments;
+ function makeTravelBoosterUrl(_OrderFromB2B) {
+    if (isNotEmptyObject(_OrderFromB2B)) {
+      const [segment] = _OrderFromB2B.Order.Segments;
       const isHotel = segment.ProductType === 'HTL';
       const {
         OrderSegId,
@@ -413,7 +409,7 @@ var url = SourceUrl;
         ItemFax,
         ItemZip,
       } = segment;
-      const Paxes = _Order.Order.Paxes.map((p) => ({
+      const Paxes = _OrderFromB2B.Order.Paxes.map((p) => ({
         Country: p.Country,
         DOB: p.DOB,
         FirstName: p.FirstName,
@@ -449,37 +445,34 @@ var url = SourceUrl;
 
       const isSupportedSupplier = SUPPLIERS[SysSuppCode] != null;
       const disabled = isHotel && isSupportedSupplier ? '' : 'disabled';
-      const queryString = `Order=${encodeURIComponent(
-        JSON.stringify(miniOrder)
-      )}`;
 
       $('#TravelBoosterUrl').remove();
       $('#wid-id-myorders header span:first').after(
-        `<a target='_blank' id='TravelBoosterUrl'
+        `<a id='TravelBoosterUrl'
         class='btn btn-xs btn-danger margin-top-5 margin-top-5 ${disabled}'
-        href='${TARGET_URL}?${queryString}'>
-          Travel Booster #${_Order.OrderRow.SegmentId}
+        href='#'>
+          Travel Booster #${_OrderFromB2B.OrderRow.SegmentId}
          </a>`
       );
+
+        var myEl = document.getElementById('TravelBoosterUrl');
+        myEl.addEventListener('click', function() {
+            GM_setValue('Order', '');
+            if (miniOrder){
+                GM_setValue('Order', JSON.stringify(miniOrder));
+                window.open(`${TARGET_URL}`);
+            }
+        }, false);
     }
     // NC.Widgets.B2B.Utils.SmallWarningBox('Please, Select the Order first');
-  }
-
- function saveOrderToStorage() {
-    if (isNotEmptyObject(_OrderSmall)) {
-      GM_setValue('Order', '');
-      GM_setValue('Order', JSON.stringify(_OrderSmall));
-       // localStorage.removeItem("Order");
-     //   localStorage.setItem("Order", JSON.stringify(_OrderSmall));
-      // console.log('Order Saved Successfully', _Order.OrderSegId);
-    }
   }
 
   function loadOrderFromStorage() {
     let order = GM_getValue('Order');
     //  const order = localStorage.getItem("Order");
     if (isNotEmptyObject(order)) {
-      _OrderSmall = JSON.parse(order);
+      _Order = JSON.parse(order);
+
     }
   }
 })();
