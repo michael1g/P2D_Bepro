@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     3.0.3
+// @version     3.0.4
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -25,7 +25,7 @@
 
   let _Order;
   let SourceUrl = "";
-  let shouldSaveGlobal = false;
+  let shouldSaveGlobal = true;
 
   const TIMEOUT = 420;
 
@@ -255,24 +255,29 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
                 clearInterval(waitList);
                 jQuery("a[title='"+supplierText+"']").click();
 
-                setTimeout(() => {
-                    jQuery('[id*=tabControlMain_txtDesc]').val(_Order.ItemDesc);
-                    jQuery('[id*=cbAreas_tbAutoComplete]').val('Tel Aviv, TLV, Israel, ');
-                    jQuery('[id*=cbAreas_hfAutoComplete]').val(4455); // Tel Aviv, TLV, Israel,
+                        var waitList2 = setInterval(() => {
+                          if (jQuery('[id*=tabControlMain_cbServiceProvider_tbAutoComplete]').val() != ''){
+                              clearInterval(waitList2);
+                                              setTimeout(() => {
+                                                  jQuery('[id*=tabControlMain_txtDesc]').val(_Order.ItemDesc);
+                                                  jQuery('[id*=cbAreas_tbAutoComplete]').val('Tel Aviv, TLV, Israel, ');
+                                                  jQuery('[id*=cbAreas_hfAutoComplete]').val(4455); // Tel Aviv, TLV, Israel,
 
-                    const { ItemAddress, SuppCityDesc, ItemZip, ItemPhone, ItemFax } = _Order;
-                    jQuery('[id*=productAddress_tbAddress]').val(ItemAddress);
-                    jQuery('[id*=productAddress_tbCity]').val(SuppCityDesc);
-                    jQuery('[id*=productAddress_tbZip]').val(ItemZip);
-                    jQuery('[id*=G2DataForm1_txtPhone1]').val(ItemPhone);
-                    jQuery('[id*=tabControlMain_txtFax]').val(ItemFax);
+                                                  const { ItemAddress, SuppCityDesc, ItemZip, ItemPhone, ItemFax } = _Order;
+                                                  jQuery('[id*=productAddress_tbAddress]').val(ItemAddress);
+                                                  jQuery('[id*=productAddress_tbCity]').val(SuppCityDesc);
+                                                  jQuery('[id*=productAddress_tbZip]').val(ItemZip);
+                                                  jQuery('[id*=G2DataForm1_txtPhone1]').val(ItemPhone);
+                                                  jQuery('[id*=tabControlMain_txtFax]').val(ItemFax);
 
-                    fillReservation();
-                    fillDates();
-                        setTimeout(() => {
-                             showPricingTab(options);
-                        }, 1000);
-                }, 1000);
+                                                  fillReservation();
+                                                  fillDates();
+                                                  setTimeout(() => {
+                                                      showPricingTab(options);
+                                                  }, 3000);
+                                              }, 1000);
+                          }
+                        }, 500);
             }
          }, 500);
     }
@@ -342,13 +347,16 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
             jQuery('[id*=ctl01_txtSellPrice]')
                 .val(SysTotalGross2)
                 .trigger(jQuery.Event('change'));
+
+               setTimeout(() => {
+                       if (shouldSaveGlobal) {
+                           jQuery('[id*=frmTransact_btnContinue').click();
+                       }
+               }, 2000);
         }, 2000);
 
 
 
-    if (shouldSaveGlobal) {
-      jQuery('[id*=frmTransact_btnContinue').click();
-    }
   }
 
    function fillReservation() {
@@ -381,6 +389,12 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
     jQuery('[id*=rmDates_dsEndDate_tbCalendar]')
       .val(checkOutString)
       .trigger('change');
+
+     jQuery('[id*=frmDates_dsStartDate_hfDate]')
+      .val(checkInString);
+
+     jQuery('[id*=frmDates_dsEndDate_hfDate]')
+      .val(checkOutString);
   }
 
 
