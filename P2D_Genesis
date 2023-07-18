@@ -15,8 +15,8 @@
 // @grant       GM_registerMenuCommand
 // @grant       GM_unregisterMenuCommand
 // @run-at      document-end
-// @updateURL   https://raw.githubusercontent.com/michael1g/GenesisBepro/main/GenesisBepro.js
-// @downloadURL https://raw.githubusercontent.com/michael1g/GenesisBepro/main/GenesisBepro.js
+// @updateURL   https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_Genesis.js
+// @downloadURL https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_Genesis.js
 // ==/UserScript==
 
 /* global $, jQuery, NC */
@@ -157,7 +157,7 @@ var url = SourceUrl;
     const order = JSON.stringify(_Order, null, 2);
 
 
-jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Genesis</a></button>`).insertBefore(`[id*=frmTransact_btnCancel]`);
+jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Genesis H</a></button>`).insertBefore(`[id*=frmTransact_btnCancel]`);
     jQuery('#FillDetails').click(fillHotelDetails);
     jQuery('#FillSaveDetails').click(() =>
       fillHotelDetails({ shouldSave: false })
