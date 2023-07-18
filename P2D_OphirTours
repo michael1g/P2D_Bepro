@@ -98,7 +98,7 @@
   };
 
 
-  const TARGET_URL = "https://b2e-ophirtours-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
+  const TARGET_URL = "https://b2e-genesis-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
   function getQueryStringByName (name){
 var url = SourceUrl;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -156,12 +156,6 @@ var url = SourceUrl;
 
     const order = JSON.stringify(_Order, null, 2);
 
-
-jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Ophir H</a></button>`).insertBefore(`[id*=frmTransact_btnCancel]`);
-    jQuery('#FillDetails').click(fillHotelDetails);
-    jQuery('#FillSaveDetails').click(() =>
-      fillHotelDetails({ shouldSave: false })
-    );
   }
 
   function addPaxesButtons() {
@@ -170,13 +164,6 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
       return;
     }
 
-
-    const order = JSON.stringify(_Order.Paxes, null, 2);
-      if (order) jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSavePaxes" href="#" style="text-decoration: none; color: #2c21d1;">Ophir P</a></p>`).insertAfter("#ctl00_MainContent_dfAddCustomer_CustomersList1_btnAddPax");
-    jQuery('#FillPaxes').click(fillPaxesDetails);
-    jQuery('#FillSavePaxes').click(() =>
-      fillPaxesDetails({ shouldSave: true })
-    );
 
   }
 
@@ -480,6 +467,9 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
     }
     // NC.Widgets.B2B.Utils.SmallWarningBox('Please, Select the Order first');
   }
+
+    GM.registerMenuCommand("Insert paxes", () => fillPaxesDetails({ shouldSave: shouldSaveGlobal }));
+GM.registerMenuCommand("Insert hotel", () => fillHotelDetails({ shouldSave: shouldSaveGlobal }) );
 
   function loadOrderFromStorage() {
     let order = GM_getValue('Order');
