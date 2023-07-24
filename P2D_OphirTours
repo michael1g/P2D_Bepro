@@ -9,7 +9,7 @@
 // @icon64      https://ot.beprotravel.com/favicon.ico
 // @homepage    https://ot.beprotravel.com/
 // @match       *://ot.beprotravel.com/*
-// @match       *//b2e-ophirtours.travelbooster.com/*
+// @match       *b2e-ophirtours.travelbooster.com/*
 // @grant       GM_setValue
 // @grant       GM_getValue
 // @grant       GM_registerMenuCommand
