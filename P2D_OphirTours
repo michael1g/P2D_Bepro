@@ -98,7 +98,7 @@
   };
 
 
-  const TARGET_URL = "https://b2e-genesis-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
+  const TARGET_URL = "https://b2e-ophirtours.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
   function getQueryStringByName (name){
 var url = SourceUrl;
     name = name.replace(/[\[\]]/g, '\\$&');
