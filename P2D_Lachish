@@ -15,8 +15,8 @@
 // @grant       GM_registerMenuCommand
 // @grant       GM_unregisterMenuCommand
 // @run-at      document-end
-// @updateURL   https://raw.githubusercontent.com/michael1g/P2D_lachish/main/P2D_lachish.js
-// @downloadURL https://raw.githubusercontent.com/michael1g/P2D_lachish/main/P2D_lachish.js
+// @updateURL   https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_lachish.js
+// @downloadURL https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_lachish.js
 // ==/UserScript==
 
 /* global $, jQuery, NC */
