@@ -29,27 +29,26 @@
 
   const TIMEOUT = 420;
 
-  const SUPPLIERS = {
+const SUPPLIERS = {
     gogb: 'GO GLOBAL TRAVEL',
     ean1: 'EXPEDIA',
     ean2: 'EXPEDIA',
-    ean7: 'EXPEDIA',
-    ean8: 'EXPEDIA',
     hbed: 'HOTELBEDS',
     hb5: 'HOTELBEDS',
-    tboh: 'TBO HOLIDAYS EUROPE',
+    tboh: 'TBOHOLIDAYS',
     trvc: 'TRAVCO',
     trv6: 'TRAVCO',
     airt: 'AIRTOUR',
     asa: 'ANGELA SHANLEY ASSOCIATES LTD',
     eutr: 'EUROTOURS INTERNATIONAL',
     htsw: 'HOTUSA (RESTEL)',
-    sunh: 'SUNHOTELS',
+    sunh: 'SUNHOTEL//WEB BEDS',
     ostr: 'RATEHAWK',
-    tdor: 'TELDAR TRAVEL',
+    tdor: 'TELDAR',
     brst: 'BRAYSTON TRAVEL LTD',
     grom: 'GET A ROOM',
     miki: 'MIKI TRAVEL',
+    brst":'BRAYSTON',
   };
 
   const STATUSES = {
