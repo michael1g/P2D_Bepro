@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Genesis!
 // @namespace   https://genesis.beprotravel.com/
-// @version     3.0.4
+// @version     5.0.1
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -9,19 +9,22 @@
 // @icon64      https://genesis.beprotravel.com/favicon.ico
 // @homepage    https://genesis.beprotravel.com/
 // @match       *://genesis.beprotravel.com/*
-// @match       *.travelbooster.com/*
+// @match       *b2e-genesis-out.travelbooster.com/*
 // @grant       GM_setValue
 // @grant       GM_getValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_unregisterMenuCommand
 // @run-at      document-end
-// @updateURL   https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/GenesisBepro.js
-// @downloadURL https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/GenesisBepro.js
+// @updateURL   https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_Genesis.js
+// @downloadURL https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_Genesis.js
 // ==/UserScript==
+
+
 
 /* global $, jQuery, NC */
 (function () {
   'use strict';
+
 
   let _Order;
   let SourceUrl = "";
@@ -35,7 +38,7 @@
     ean2: 'EXPEDIA',
     ean7: 'EXPEDIA',
     ean8: 'EXPEDIA',
-    hbed: 'EXPEDIA',
+    hbed: 'HOTELBEDS',
     hb5: 'HOTELBEDS',
     tboh: 'TBO HOLIDAYS EUROPE BV',
     trvc: 'TRAVCO',
@@ -156,12 +159,6 @@ var url = SourceUrl;
 
     const order = JSON.stringify(_Order, null, 2);
 
-
-jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decoration: none; color: #2c21d1;">Genesis</a></button>`).insertBefore(`[id*=frmTransact_btnCancel]`);
-    jQuery('#FillDetails').click(fillHotelDetails);
-    jQuery('#FillSaveDetails').click(() =>
-      fillHotelDetails({ shouldSave: false })
-    );
   }
 
   function addPaxesButtons() {
@@ -170,13 +167,6 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
       return;
     }
 
-
-    const order = JSON.stringify(_Order.Paxes, null, 2);
-      if (order) jQuery(`<p style="text-align: center; margin-bottom: 10px;"><a id="FillSavePaxes" href="#" style="text-decoration: none; color: #2c21d1;">Genesis P</a></p>`).insertAfter("#ctl00_MainContent_dfAddCustomer_CustomersList1_btnAddPax");
-    jQuery('#FillPaxes').click(fillPaxesDetails);
-    jQuery('#FillSavePaxes').click(() =>
-      fillPaxesDetails({ shouldSave: true })
-    );
 
   }
 
@@ -297,7 +287,8 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
 */
 
                         setTimeout(() => {
-                             addCurrency(options);
+                             //addCurrency(options);
+                            addPrice(options);
                         }, 1000);
      
 
@@ -305,19 +296,24 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
 
   }
 
-  function addCurrency(options = {}) {
+  function addCurrency({ shouldSave }) {
     const { SysCurrencyCode = 'USD' } = _Order;
-       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click()
+       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click();
         setTimeout(() => {
             jQuery("a[title^='"+SysCurrencyCode+"']").click();
+
 
           jQuery('[id*=dlCustomers_ctl01_chkSelected]')
           .prop('checked', true)
           .trigger(jQuery.Event('change'));
 
                setTimeout(() => {
-                   addPrice(options);
-               }, 1000);
+                      if (shouldSaveGlobal) {
+                           jQuery('[id*=frmTransact_btnContinue').click();
+                       }
+                  // addPrice(options);
+
+               }, 2000);
         }, 1000);
 
 /*
@@ -330,11 +326,12 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
 
   }
 
-  function addPrice({ shouldSave }) {
-    const { SysTotalGross, SysTotalGross2, OrderSegId } = _Order;
+  function addPrice(options = {}) {
+    const { SysTotalGross,SysTotalGross2,OrderSegId } = _Order;
  jQuery('[id*=ctl01_txtSuppPrice]')
       .val(SysTotalGross)
       .trigger(jQuery.Event('change'));
+
         setTimeout(() => {
              jQuery('[id*=ctl01_txtSellPrice]')
                  .val(SysTotalGross2)
@@ -349,10 +346,8 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
                 .trigger(jQuery.Event('change'));
 
                setTimeout(() => {
-                       if (shouldSaveGlobal) {
-                           jQuery('[id*=frmTransact_btnContinue').click();
-                       }
-               }, 2000);
+                    addCurrency(options);
+               }, 1000);
         }, 2000);
 
 
@@ -480,6 +475,10 @@ jQuery(`<button type='button'><a id="FillSaveDetails" href="#" style="text-decor
     }
     // NC.Widgets.B2B.Utils.SmallWarningBox('Please, Select the Order first');
   }
+
+    GM.registerMenuCommand("Insert paxes", () => fillPaxesDetails({ shouldSave: shouldSaveGlobal }));
+GM.registerMenuCommand("Insert hotel", () => fillHotelDetails({ shouldSave: shouldSaveGlobal }) );
+
 
   function loadOrderFromStorage() {
     let order = GM_getValue('Order');
