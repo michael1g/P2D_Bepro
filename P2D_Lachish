@@ -19,9 +19,11 @@
 // @downloadURL https://raw.githubusercontent.com/michael1g/P2D_Bepro/main/P2D_lachish.js
 // ==/UserScript==
 
+
 /* global $, jQuery, NC */
 (function () {
   'use strict';
+
 
   let _Order;
   let SourceUrl = "";
@@ -29,26 +31,27 @@
 
   const TIMEOUT = 420;
 
-const SUPPLIERS = {
+  const SUPPLIERS = {
     gogb: 'GO GLOBAL TRAVEL',
     ean1: 'EXPEDIA',
     ean2: 'EXPEDIA',
+    ean7: 'EXPEDIA',
+    ean8: 'EXPEDIA',
     hbed: 'HOTELBEDS',
     hb5: 'HOTELBEDS',
-    tboh: 'TBOHOLIDAYS',
+    tboh: 'TBO HOLIDAYS EUROPE BV',
     trvc: 'TRAVCO',
     trv6: 'TRAVCO',
     airt: 'AIRTOUR',
     asa: 'ANGELA SHANLEY ASSOCIATES LTD',
     eutr: 'EUROTOURS INTERNATIONAL',
+    hpro: 'HOTELSPRO',
     htsw: 'HOTUSA (RESTEL)',
-    sunh: 'SUNHOTEL//WEB BEDS',
+    sunh: 'WEBBEDS FZ LLC',
     ostr: 'RATEHAWK',
     tdor: 'TELDAR',
-    brst: 'BRAYSTON TRAVEL LTD',
+    brst: 'BRAYSTON TRAVEL',
     grom: 'GET A ROOM',
-    miki: 'MIKI TRAVEL',
-    brst":'BRAYSTON',
   };
 
   const STATUSES = {
@@ -97,7 +100,7 @@ const SUPPLIERS = {
   };
 
 
-  const TARGET_URL = "https://b2e-lachish.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
+  const TARGET_URL = "https://b2e-genesis-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
   function getQueryStringByName (name){
 var url = SourceUrl;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -283,7 +286,8 @@ var url = SourceUrl;
 */
 
                         setTimeout(() => {
-                             addCurrency(options);
+                             //addCurrency(options);
+                            addPrice(options);
                         }, 1000);
      
 
@@ -291,19 +295,24 @@ var url = SourceUrl;
 
   }
 
-  function addCurrency(options = {}) {
+  function addCurrency({ shouldSave }) {
     const { SysCurrencyCode = 'USD' } = _Order;
-       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click()
+       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click();
         setTimeout(() => {
             jQuery("a[title^='"+SysCurrencyCode+"']").click();
+
 
           jQuery('[id*=dlCustomers_ctl01_chkSelected]')
           .prop('checked', true)
           .trigger(jQuery.Event('change'));
 
                setTimeout(() => {
-                   addPrice(options);
-               }, 1000);
+                      if (shouldSaveGlobal) {
+                           jQuery('[id*=frmTransact_btnContinue').click();
+                       }
+                  // addPrice(options);
+
+               }, 2000);
         }, 1000);
 
 /*
@@ -316,11 +325,12 @@ var url = SourceUrl;
 
   }
 
-  function addPrice({ shouldSave }) {
-    const { SysTotalGross, SysTotalGross2, OrderSegId } = _Order;
+  function addPrice(options = {}) {
+    const { SysTotalGross,SysTotalGross2,OrderSegId } = _Order;
  jQuery('[id*=ctl01_txtSuppPrice]')
       .val(SysTotalGross)
       .trigger(jQuery.Event('change'));
+
         setTimeout(() => {
              jQuery('[id*=ctl01_txtSellPrice]')
                  .val(SysTotalGross2)
@@ -335,10 +345,8 @@ var url = SourceUrl;
                 .trigger(jQuery.Event('change'));
 
                setTimeout(() => {
-                       if (shouldSaveGlobal) {
-                           jQuery('[id*=frmTransact_btnContinue').click();
-                       }
-               }, 2000);
+                    addCurrency(options);
+               }, 1000);
         }, 2000);
 
 
@@ -469,6 +477,7 @@ var url = SourceUrl;
 
     GM.registerMenuCommand("Insert paxes", () => fillPaxesDetails({ shouldSave: shouldSaveGlobal }));
 GM.registerMenuCommand("Insert hotel", () => fillHotelDetails({ shouldSave: shouldSaveGlobal }) );
+
 
   function loadOrderFromStorage() {
     let order = GM_getValue('Order');
