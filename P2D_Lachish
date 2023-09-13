@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Lachish!
 // @namespace   https://lachish.beprotravel.com/
-// @version     5.0.3
+// @version     5.0.4
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -100,7 +100,7 @@
   };
 
 
-  const TARGET_URL = "https://b2e-genesis-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
+  const TARGET_URL = "https://b2e-lachish-out.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
   function getQueryStringByName (name){
 var url = SourceUrl;
     name = name.replace(/[\[\]]/g, '\\$&');
