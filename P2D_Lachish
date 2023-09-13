@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 Lachish!
 // @namespace   https://lachish.beprotravel.com/
-// @version     5.0.6
+// @version     5.0.7
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -39,7 +39,7 @@
     ean8: 'EXPEDIA',
     hbed: 'HOTELBEDS',
     hb5: 'HOTELBEDS',
-    tboh: 'TBO HOLIDAYS EUROPE BV',
+    tboh: 'TBOHOLIDAYS',
     trvc: 'TRAVCO',
     trv6: 'TRAVCO',
     airt: 'AIRTOUR',
@@ -47,7 +47,7 @@
     eutr: 'EUROTOURS INTERNATIONAL',
     hpro: 'HOTELSPRO',
     htsw: 'HOTUSA (RESTEL)',
-    sunh: 'WEBBEDS FZ LLC',
+    sunh: 'SUNHOTEL//WEB BEDS',
     ostr: 'RATEHAWK',
     tdor: 'TELDAR',
     brst: 'BRAYSTON TRAVEL',
