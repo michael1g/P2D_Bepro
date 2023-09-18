@@ -20,7 +20,6 @@
 // ==/UserScript==
 
 
-
 /* global $, jQuery, NC */
 (function () {
   'use strict';
