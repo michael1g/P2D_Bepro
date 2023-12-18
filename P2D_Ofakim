@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 ofakim!
 // @namespace   https://ofakim.beprotravel.com/
-// @version     5.0.5
+// @version     5.0.6
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -33,8 +33,6 @@
     gogb: 'GO GLOBAL TRAVEL',
     ean1: 'EXPEDIA',
     ean2: 'EXPEDIA',
-    ean7: 'EXPEDIA',
-    ean8: 'EXPEDIA',
     hbed: 'HOTELBEDS S.L.U',
     hb5: 'HOTELBEDS S.L.U',
     tboh: 'TBO HOLIDAYS EUROPE BV',
@@ -45,9 +43,9 @@
     asa: 'ANGELA SHANLEY ASSOCIATES LTD',
     eutr: 'EUROTOURS INTERNATIONAL',
     htsw: 'HOTUSA (RESTEL)',
-    sunh: 'SUNHOTELS',
-    ostr: 'RATEHAWK',
-    tdor: 'TELDAR TRAVEL',
+    sunh: 'WEBBEDS',
+    ostr: 'RATE HAWKK',
+    tdor: 'TELDAR',
     brst: 'BRAYSTON TRAVEL LTD',
     grom: 'GET A ROOM',
     miki: 'MIKI TRAVEL',
