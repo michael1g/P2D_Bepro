@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 ofakim!
 // @namespace   https://ofakim.beprotravel.com/
-// @version     5.0.7
+// @version     5.0.8
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -237,7 +237,7 @@ var url = SourceUrl;
 
         //wait until list is loaded
         var waitList = setInterval(() => {
-            if (jQuery("a[title='"+supplierText+"']")){
+            if (jQuery("a[title='BEPRO']")){
                 clearInterval(waitList);
                 jQuery("a[title='"+supplierText+"']").click();
 
