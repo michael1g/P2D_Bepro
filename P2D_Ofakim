@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro 2 ofakim!
 // @namespace   https://ofakim.beprotravel.com/
-// @version     5.0.9
+// @version     5.1.0
 // @description This userscript send BePro Data to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, BePro Team
@@ -295,17 +295,21 @@ var url = SourceUrl;
 
   function addCurrency(options = {}) {
     const { SysCurrencyCode = 'USD' } = _Order;
-       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click()
+       jQuery('[id*=editCustomers_frmTransact_ddlCurrency_Widget]').click();
         setTimeout(() => {
-            jQuery("a[title^='"+SysCurrencyCode+"']").click();
+             jQuery("a[title^='"+SysCurrencyCode+"']").click();
+            jQuery('[id*=ctl01_txtSellPrice]').val(0).trigger(jQuery.Event('select'));
+              setTimeout(() => {
+                   jQuery('[id*=dlCustomers_ctl01_chkSelected]')
+                                .prop('checked', true)
+                                .trigger(jQuery.Event('change'));
 
-          jQuery('[id*=dlCustomers_ctl01_chkSelected]')
-          .prop('checked', true)
-          .trigger(jQuery.Event('change'));
-
-               setTimeout(() => {
-                   addPrice(options);
+                  setTimeout(() => {
+                      addPrice(options);
+                  }, 1000);
                }, 1000);
+           
+
         }, 1000);
 
 /*
