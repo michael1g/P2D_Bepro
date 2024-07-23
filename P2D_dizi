@@ -8,7 +8,7 @@
 // @icon        https://dizi.beprotravel.com/favicon.ico
 // @icon64      https://dizi.beprotravel.com/favicon.ico
 // @homepage    https://dizi.beprotravel.com/
-// @match       *://ofakim.beprotravel.com/*
+// @match       *://dizi.beprotravel.com/*
 // @match       *b2e-dzgrp.travelbooster.com/*
 // @grant       GM_setValue
 // @grant       GM_getValue
@@ -97,7 +97,7 @@
   };
 
 
-  const TARGET_URL = "https://b2e-ofakim.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
+  const TARGET_URL = "https://b2e-dzgrp.travelbooster.com/UI_NET/Booking/PaxFile/Dashboard.aspx";
   function getQueryStringByName (name){
 var url = SourceUrl;
     name = name.replace(/[\[\]]/g, '\\$&');
